@@ -4,27 +4,17 @@ import pyodbc
 from datetime import datetime, timedelta
 from typing import List, Dict
 from pydantic import BaseModel
-import os
-from dotenv import load_dotenv
 
 app = FastAPI(title="Flight Data API", version="1.0.0")
 
 # Database configuration
-# Load environment variables
-load_dotenv()
-
-# Database configuration
-load_dotenv()
-
-# Database configuration
 DB_CONFIG = {
-    "server": os.getenv("DB_SERVER", "localhost"),
-    "database": os.getenv("DB_DATABASE", "C2RBetaDB"),
-    "username": os.getenv("DB_USERNAME", "SA"),
-    "password": os.getenv("DB_PASSWORD"),
-    "driver": os.getenv("DB_DRIVER", "{ODBC Driver 18 for SQL Server}"),
-    "schema": os.getenv("DB_SCHEMA", "dbo"),
-    "trust_cert": os.getenv("DB_TRUST_CERT", "yes"),
+    "server": "localhost",
+    "database": "C2RBetaDB",
+    "username": "SA",
+    "password": "12.September.2025",
+    "driver": "{ODBC Driver 18 for SQL Server}",
+    "schema": "dbo",  # Change this to your actual schema name if different
 }
 
 
@@ -63,16 +53,6 @@ def get_db_connection():
 
 
 def get_flight_data(problem_id: int, airline_id: int) -> List[Dict]:
-    """
-    Execute SQL query to get flight data
-
-    Args:
-        problem_id: The problem ID to filter by
-        airline_id: The airline ID to filter by
-
-    Returns:
-        List of dictionaries containing flight information
-    """
     # Calculate date range (current time - 6 months to current time)
     end_date = datetime.now()
     start_date = end_date - timedelta(days=180)  # 6 months (365 * 3)
